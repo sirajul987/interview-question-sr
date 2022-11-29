@@ -14,7 +14,7 @@
                     <input type="text" name="title" placeholder="Product Title" class="form-control">
                 </div>
                 <div class="col-md-2">
-                <select name="variant" id="" class="form-control w-100">
+                    <select name="variant" id="" class="form-control w-100">
                         @foreach ($variants as $variant)
                             <option value=""></option>
                             <optgroup label="{{ $variant->title }}">
@@ -59,47 +59,42 @@
                     </thead>
 
                     <tbody>
-                    @foreach($products as $product)
 
+                        @foreach ($products as $product)
+                            <tr>
+                                <td>{{ $product->id }}</td>
+                                <td>{{ $product->title }} <br> Created at : {{date('j',strtotime($product->created_at))}}-{{date('M',strtotime($product->created_at))}}-{{date('Y',strtotime($product->created_at))}}</td>
+                                <td>{!! Str::limit($product->description, 30, ' ...') !!}</td>
+                                <td>
+                                    @foreach ($product->productVariantPrices as $productVariantPrice)
+                                        <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
             
-                    <tr>
-                        <td>{{$products->firstItem()+$loop->index}}</td>
-                        <!-- Showing formated data as referance -->
-                        <td>{{ $product->title }} <br> Created at : {{date('j',strtotime($product->created_at))}}-{{date('M',strtotime($product->created_at))}}-{{date('Y',strtotime($product->created_at))}}</td>
-                        <td>{!! Str::limit($product->description, 30, ' ...') !!}</td><!-- Used string limit 30  -->
+                                            <dt class="col-sm-3 pb-0">
+                                                {{ $productVariantPrice->variantText }}
+                                            </dt>
+                                            <dd class="col-sm-9">
+                                                <dl class="row mb-0">
+                                                    <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariantPrice->price,2) }}</dt>
+                                                    <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariantPrice->stock,2) }}</dd>
+                                                </dl>
+                                            </dd>
+                                        </dl> 
+                                    @endforeach
+                                    <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ route('product.edit', $product->id) }}" class="btn btn-success">Edit</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+
                         
-                        <td>
-                                @foreach ($productVariantPriceArr as $productVariantPrice)
-                                    <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
-        
-                                        <dt class="col-sm-3 pb-0">
-                                            {{ $productVariantPrice->variantText }}
-                                        </dt>
-                                        <dd class="col-sm-9">
-                                            <dl class="row mb-0">
-                                                <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariantPrice->price,2) }}</dt>
-                                                <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariantPrice->stock,2) }}</dd>
-                                            </dl>
-                                        </dd>
-                                    </dl> 
-                                @endforeach
-                                <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
-                            </td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <a href="{{ route('product.edit', 1) }}" class="btn btn-success">Edit</a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    
-
 
                     </tbody>
 
                 </table>
-                
             </div>
 
         </div>
@@ -110,8 +105,8 @@
                     <!-- <p>Showing 1 to 10 out of 100</p> -->
                     <p>Showing {{$products->firstItem()}} to {{$products->lastItem()}} out of {{$products->total()}}</p>
                 </div>
-                <div class="col-md-2">
-                {{ $products->links()}}
+                <div class="col-md-6 float-right">
+                    {{ $products->links() }}
                 </div>
             </div>
         </div>
