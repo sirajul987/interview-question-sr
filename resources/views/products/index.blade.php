@@ -26,7 +26,6 @@
                         @endforeach
                     </select>
                 </div>
-
                 <div class="col-md-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
